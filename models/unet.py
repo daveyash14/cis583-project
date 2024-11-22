@@ -15,7 +15,7 @@ class CrossAttention(nn.Module):
         latent_flat = latent.flatten(2).permute(2, 0, 1)  # B, embed_dim, H*W -> (H*W, B, embed_dim)
 
         # Project text embeddings and expand for attention
-        text_embedding = self.text_proj(text_embedding)  # Ensure it's embed_dim
+        text_embedding = self.text_proj(text_embedding)
         text_embedding = text_embedding.unsqueeze(0).repeat(latent_flat.size(0), 1, 1)  # (H*W, B, embed_dim)
 
         # Perform attention
@@ -29,7 +29,7 @@ class UNet(nn.Module):
         super(UNet, self).__init__()
         self.down1 = nn.Conv2d(latent_dim, 64, kernel_size=3, padding=1)
         self.down2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
-        self.attn = CrossAttention(embed_dim=text_embed_dim)  # Use text_embed_dim here
+        self.attn = CrossAttention(embed_dim=text_embed_dim)
         self.reduce_channels = nn.Conv2d(text_embed_dim, 128, kernel_size=1)
         self.up1 = nn.ConvTranspose2d(128, 64, kernel_size=3, padding=1)
         self.up2 = nn.ConvTranspose2d(64, latent_dim, kernel_size=3, padding=1)

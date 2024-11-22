@@ -13,7 +13,7 @@ class FlickrDataset(Dataset):
         with open(captions_file, "r") as f:
             for line in f.readlines():
                 image_name, caption = line.strip().split('\t')
-                self.image_caption_pairs.append((image_name.split("#")[0], caption))
+                self.image_caption_pairs.append((image_name, caption))
 
     def __len__(self):
         return len(self.image_caption_pairs)
