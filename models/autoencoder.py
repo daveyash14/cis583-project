@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 
 class Encoder(nn.Module):
-    def __init__(self, latent_dim):
+    def __init__(self, latent_dim, in_channels=3):
         super(Encoder, self).__init__()
         self.conv = nn.Sequential(
-            nn.Conv2d(1, 8, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(in_channels, 8, kernel_size=3, stride=1, padding=1),
             nn.LeakyReLU(),
             nn.Conv2d(8, 16, kernel_size=3, stride=1, padding=1),
             nn.LeakyReLU(),
@@ -21,7 +21,7 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, latent_dim):
+    def __init__(self, latent_dim, out_channels=3):
         super(Decoder, self).__init__()
         self.deconv = nn.Sequential(
             # nn.ConvTranspose2d(latent_dim, 64, kernel_size=3, stride=1, padding=1),
@@ -32,9 +32,9 @@ class Decoder(nn.Module):
             nn.LeakyReLU(),
             nn.ConvTranspose2d(16, 8, kernel_size=3, stride=1, padding=1),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(8, 1, kernel_size=3, stride=1, padding=1),
-            # nn.Tanh() # For flickr
-            nn.Sigmoid() # For mnist
+            nn.ConvTranspose2d(8, out_channels, kernel_size=3, stride=1, padding=1),
+            nn.Tanh() # For flickr
+            # nn.Sigmoid() # For mnist
         )
 
     def forward(self, x):
